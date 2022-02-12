@@ -13,7 +13,8 @@ qr = qrcode.QRCode(
     box_size=10,
     border=4,
 )
-qr.add_data('https://www.facebook.com/reximman.robles')
+data = "https://www.facebook.com/reximman.robles"
+qr.add_data(data)
 qr.make(fit=True)
 img = qr.make_image(fill_color="black", back_color="white")
 img.save("qr.png")
