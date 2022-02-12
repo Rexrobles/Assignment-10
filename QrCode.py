@@ -13,11 +13,27 @@ qr = qrcode.QRCode(
     box_size=10,
     border=4,
 )
-data = "https://www.facebook.com/reximman.robles/"
-qr.add_data('data')
+qr.add_data('https://www.facebook.com/reximman.robles')
 qr.make(fit=True)
-img = qr.make_image(fill_color="white", back_color="black")
+img = qr.make_image(fill_color="black", back_color="white")
 img.save("qr.png")
 
+# Qr code scanner
+import cv2
+import webbrowser
 
-
+cap = cv2.VideoCapture(0)
+det =  cv2.QRCodeDetector()
+while True:
+    _, img = cap.read()
+    data, one, _ = det.detectAndDecode(img)
+    if data:
+        read = data
+        break
+    cv2.imshow('QRCode Scanner', img)
+    if cv2.waitKey(1)==ord('a'):
+        break
+    
+direct = webbrowser.open((str(read)))
+cap.release(read)
+cv2.destroyAllWindows 
