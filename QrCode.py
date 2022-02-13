@@ -23,6 +23,8 @@ img.save("qr.png")
 import cv2
 import webbrowser
 import datetime
+from pyzbar.pyzbar import decode
+
 
 cap = cv2.VideoCapture(0)
 det =  cv2.QRCodeDetector()
@@ -34,8 +36,18 @@ while True:
         # Recoding the date and time when the qr code scanned
         with open("QrCodeRecord.txt", 'a') as f:
             f.write(f'Scanned QR Code {data} recorded at %s.\n' % 
-               (datetime.datetime.now()))
+                (datetime.datetime.now()))
         break
+    
+    for Information in decode(img):
+        txt = Information.data.decode('utf-8')
+        print(txt)
+        with open("QrCodeRecord.txt", 'a') as f:
+            f.write(f'Scanned QR Code containing {txt} recorded at %s.\n' % 
+                (datetime.datetime.now())) 
+            cap.release(txt)
+            cv2.destroyAllWindows
+            break
     cv2.imshow('QRCode Scanner', img)
     if cv2.waitKey(1)==ord('a'):
         break
@@ -43,3 +55,4 @@ while True:
 direct = webbrowser.open((str(read)))
 cap.release(read)
 cv2.destroyAllWindows 
+       
