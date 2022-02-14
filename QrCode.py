@@ -11,17 +11,21 @@ import webbrowser
 import datetime
 from pyzbar.pyzbar import decode
 
+
 cap = cv2.VideoCapture(0)
 det =  cv2.QRCodeDetector()
 while True:
     _, img = cap.read()
     data, one, _ = det.detectAndDecode(img)
-    read = data   
+    if data:
+        read = data
+    
     for Information in decode(img):
         txt = Information.data.decode('utf-8')
         print(txt)
-        with open("QrCodeRecord.txt", 'a') as f:
-            f.write(f'{txt} ')
+        with open("QrCodeRecord.txt", 'w') as f:
+            f.write(f'{txt} recorded at Date: %s.\n'%
+            (datetime.datetime.now())) 
             cap.release(txt)
             cv2.destroyAllWindows
             break
